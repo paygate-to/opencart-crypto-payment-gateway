@@ -1,0 +1,50 @@
+<fieldset>
+  {% if description %}
+    <p>{{ description }}</p>
+  {% endif %}
+  <form id="form-paygatedottocrypto">
+    <p class="mb-2"><b>{{ text_select_coin }}</b></p>
+    <div class="list-group mb-3">
+      {% for coin in coins %}
+        <label class="list-group-item d-flex align-items-center gap-2">
+          <input type="radio" name="coin" value="{{ coin.id|e }}" class="form-check-input mt-0"{% if loop.first %} checked{% endif %}/>
+          {% if coin.logo %}<img src="{{ coin.logo|e }}" alt="" width="22" height="22" loading="lazy" style="border-radius:50%"/>{% endif %}
+          <span>{{ coin.label|e }}</span>
+        </label>
+      {% endfor %}
+    </div>
+  </form>
+  <div class="text-end">
+    <button type="button" id="button-confirm" class="btn btn-primary">{{ button_confirm }}</button>
+  </div>
+</fieldset>
+<script type="text/javascript"><!--
+$('#button-confirm').on('click', function() {
+    var element = this;
+
+    $.ajax({
+        url: 'index.php?route=extension/paygatedottocrypto/payment/paygatedottocrypto.confirm&language={{ language }}',
+        type: 'post',
+        data: $('#form-paygatedottocrypto').serialize(),
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).button('loading');
+        },
+        complete: function() {
+            $(element).button('reset');
+        },
+        success: function(json) {
+            if (json['error']) {
+                $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+            }
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+//--></script>

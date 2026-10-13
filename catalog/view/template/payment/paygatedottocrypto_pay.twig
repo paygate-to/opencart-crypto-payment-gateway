@@ -1,0 +1,77 @@
+{{ header }}
+<div id="paygatedottocrypto-pay" class="container">
+  <div class="row">{{ column_left }}
+    <div id="content" class="col">{{ content_top }}
+      <div class="mx-auto text-center" style="max-width:560px">
+        <h1 class="h2 mb-4">{{ text_pay_title }}</h1>
+        <div id="paygatedottocrypto-details"{% if status == 'paid' %} class="d-none"{% endif %}>
+          {% if qr_code %}
+            <img src="data:image/png;base64,{{ qr_code|e }}" alt="{{ address|e }}" class="img-fluid mb-3" style="max-width:280px;width:80%"/>
+          {% endif %}
+          <p class="mb-2">{{ text_send|format('<strong>' ~ display_total|e ~ '</strong>', '<strong>' ~ coin_label|e ~ '</strong>') }}</p>
+          <div class="input-group mb-3">
+            <input type="text" id="paygatedottocrypto-address" class="form-control text-center font-monospace" value="{{ address|e }}" readonly/>
+            <button type="button" id="paygatedottocrypto-copy" class="btn btn-outline-secondary" data-copied="{{ text_copied|e }}">{{ text_copy }}</button>
+          </div>
+          <p class="small text-muted">{{ text_note }}</p>
+        </div>
+        <div id="paygatedottocrypto-status" class="alert {% if status == 'paid' %}alert-success{% elseif status == 'failed' %}alert-danger{% else %}alert-info{% endif %}" role="status">
+          {% if status == 'pending' %}<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>{% endif %}{{ message|e }}
+        </div>
+        <div class="text-end"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+      </div>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+<script type="text/javascript"><!--
+(function() {
+    var status = '{{ status|e('js') }}';
+    var shown = '{{ message|e('js') }}';
+    var box = document.getElementById('paygatedottocrypto-status');
+
+    document.getElementById('paygatedottocrypto-copy').addEventListener('click', function() {
+        var input = document.getElementById('paygatedottocrypto-address'), button = this;
+
+        input.select();
+
+        (navigator.clipboard ? navigator.clipboard.writeText(input.value) : Promise.reject()).catch(function() {
+            document.execCommand('copy');
+        }).finally(function() {
+            button.textContent = button.getAttribute('data-copied');
+        });
+    });
+
+    function show(state, message) {
+        box.className = 'alert ' + (state == 'paid' ? 'alert-success' : (state == 'failed' ? 'alert-danger' : 'alert-warning'));
+        box.textContent = shown = message;
+
+        if (state == 'paid') {
+            document.getElementById('paygatedottocrypto-details').className = 'd-none';
+        }
+    }
+
+    function check() {
+        fetch('{{ status_url|e('js') }}', {cache: 'no-store', credentials: 'same-origin'}).then(function(response) {
+            return response.json();
+        }).then(function(json) {
+            if (json.message && json.message != shown) {
+                status = json.status;
+                show(status, json.message);
+            }
+
+            // An underpaid order can still be completed with a further payment: keep checking.
+            if (status != 'paid') {
+                setTimeout(check, 30000);
+            }
+        }).catch(function() {
+            show('error', '{{ text_status_error|e('js') }}');
+            setTimeout(check, 60000);
+        });
+    }
+
+    if (status != 'paid') {
+        setTimeout(check, 30000);
+    }
+})();
+//--></script>
+{{ footer }}

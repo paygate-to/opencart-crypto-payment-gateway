@@ -1,0 +1,164 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-payment" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <div class="alert alert-info"><i class="fa-solid fa-circle-info"></i> {{ text_intro }}</div>
+        <form id="form-payment" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <div class="row mb-3">
+            <label for="input-title" class="col-sm-2 col-form-label">{{ entry_title }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_paygatedottocrypto_title" value="{{ payment_paygatedottocrypto_title }}" placeholder="{{ text_default_title }}" id="input-title" class="form-control"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-description" class="col-sm-2 col-form-label">{{ entry_description }}</label>
+            <div class="col-sm-10">
+              <textarea name="payment_paygatedottocrypto_description" rows="3" placeholder="{{ entry_description }}" id="input-description" class="form-control">{{ payment_paygatedottocrypto_description }}</textarea>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-api-domain" class="col-sm-2 col-form-label">{{ entry_api_domain }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_paygatedottocrypto_api_domain" value="{{ payment_paygatedottocrypto_api_domain }}" placeholder="api.paygate.to" id="input-api-domain" class="form-control"/>
+              <div class="form-text">{{ help_api_domain }}</div>
+              <div id="error-api-domain" class="invalid-feedback"></div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-tolerance" class="col-sm-2 col-form-label">{{ entry_tolerance }}</label>
+            <div class="col-sm-10">
+              <select name="payment_paygatedottocrypto_tolerance" id="input-tolerance" class="form-select">
+                {% for value, label in tolerances %}
+                  <option value="{{ value }}"{% if value == payment_paygatedottocrypto_tolerance %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+              <div class="form-text">{{ help_tolerance }}</div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_fees }}</label>
+            <div class="col-sm-10">
+              <div class="form-check form-switch form-switch-lg">
+                <input type="hidden" name="payment_paygatedottocrypto_fees" value="0"/>
+                <input type="checkbox" name="payment_paygatedottocrypto_fees" value="1" id="input-fees" class="form-check-input"{% if payment_paygatedottocrypto_fees %} checked{% endif %}/>
+              </div>
+              <div class="form-text">{{ help_fees }}</div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_coins }}</label>
+            <div class="col-sm-10">
+              {% if coin_list_error %}
+                <div class="alert alert-warning">{{ error_coin_list }}</div>
+              {% endif %}
+              {% if coins %}
+                <div class="form-text mb-2">{{ help_coins }}</div>
+                <div class="table-responsive">
+                  <table class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <td class="text-center" style="width:1px">{{ column_enable }}</td>
+                        <td>{{ column_coin }}</td>
+                        <td>{{ column_wallet }}</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for coin in coins %}
+                        <tr>
+                          <td class="text-center">
+                            <input type="hidden" name="payment_paygatedottocrypto_coins[{{ coin.id|e }}][enabled]" value="0"/>
+                            <input type="checkbox" name="payment_paygatedottocrypto_coins[{{ coin.id|e }}][enabled]" value="1" class="form-check-input"{% if coin.enabled %} checked{% endif %}/>
+                          </td>
+                          <td class="text-nowrap">
+                            {% if coin.logo %}<img src="{{ coin.logo|e }}" alt="" width="20" height="20" loading="lazy" style="border-radius:50%;vertical-align:middle;margin-right:6px"/>{% endif %}{{ coin.label|e }} <code>{{ coin.id|e }}</code>
+                          </td>
+                          <td>
+                            <input type="text" name="payment_paygatedottocrypto_coins[{{ coin.id|e }}][wallet]" value="{{ coin.wallet|e }}" placeholder="{{ column_wallet }}" id="input-coin-{{ coin.id|replace({'_': '-', '.': '-'})|e }}" class="form-control form-control-sm" autocomplete="off" spellcheck="false"/>
+                            <div id="error-coin-{{ coin.id|replace({'_': '-', '.': '-'})|e }}" class="invalid-feedback"></div>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-order-status" class="col-sm-2 col-form-label">{{ entry_order_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_paygatedottocrypto_order_status_id" id="input-order-status" class="form-select">
+                {% for order_status in order_statuses %}
+                  <option value="{{ order_status.order_status_id }}"{% if order_status.order_status_id == payment_paygatedottocrypto_order_status_id %} selected{% endif %}>{{ order_status.name }}</option>
+                {% endfor %}
+              </select>
+              <div class="form-text">{{ help_order_status }}</div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-paid-status" class="col-sm-2 col-form-label">{{ entry_paid_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_paygatedottocrypto_paid_status_id" id="input-paid-status" class="form-select">
+                {% for order_status in order_statuses %}
+                  <option value="{{ order_status.order_status_id }}"{% if order_status.order_status_id == payment_paygatedottocrypto_paid_status_id %} selected{% endif %}>{{ order_status.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-failed-status" class="col-sm-2 col-form-label">{{ entry_failed_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_paygatedottocrypto_failed_status_id" id="input-failed-status" class="form-select">
+                {% for order_status in order_statuses %}
+                  <option value="{{ order_status.order_status_id }}"{% if order_status.order_status_id == payment_paygatedottocrypto_failed_status_id %} selected{% endif %}>{{ order_status.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-geo-zone" class="col-sm-2 col-form-label">{{ entry_geo_zone }}</label>
+            <div class="col-sm-10">
+              <select name="payment_paygatedottocrypto_geo_zone_id" id="input-geo-zone" class="form-select">
+                <option value="0">{{ text_all_zones }}</option>
+                {% for geo_zone in geo_zones %}
+                  <option value="{{ geo_zone.geo_zone_id }}"{% if geo_zone.geo_zone_id == payment_paygatedottocrypto_geo_zone_id %} selected{% endif %}>{{ geo_zone.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <div class="form-check form-switch form-switch-lg">
+                <input type="hidden" name="payment_paygatedottocrypto_status" value="0"/>
+                <input type="checkbox" name="payment_paygatedottocrypto_status" value="1" id="input-status" class="form-check-input"{% if payment_paygatedottocrypto_status %} checked{% endif %}/>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-sort-order" class="col-sm-2 col-form-label">{{ entry_sort_order }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_paygatedottocrypto_sort_order" value="{{ payment_paygatedottocrypto_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control"/>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

@@ -1,0 +1,16 @@
+<table class="table table-bordered">
+  <tbody>
+    <tr><td style="width:30%">{{ column_mode }}</td><td>{{ mode }}{% if payment.coin_label %} &middot; {{ payment.coin_label|e }}{% endif %}</td></tr>
+    <tr><td>{{ column_status }}</td><td><b>{{ status_text }}</b></td></tr>
+    {% if payment.address_in %}<tr><td>{{ column_address }}</td><td class="text-break"><code>{{ payment.address_in|e }}</code></td></tr>{% endif %}
+    {% if payment.display_total %}<tr><td>{{ column_amount_coin }}</td><td>{{ payment.display_total|e }} {{ payment.coin|upper|e }}</td></tr>{% endif %}
+    <tr><td>{{ column_amount }}</td><td>{{ payment.amount|number_format(2, '.', '') }} {{ payment.currency_code|e }}</td></tr>
+    {% if payment.value_coin %}<tr><td>{{ column_paid }}</td><td>{{ payment.value_coin|e }} {{ payment.paid_coin|upper|e }}</td></tr>{% endif %}
+    {% if payment.txids %}<tr><td>{{ column_received }}</td><td>~{{ payment.received_total|number_format(2, '.', '') }} {{ payment.currency_code|e }}</td></tr>{% endif %}
+    {% if payment.txid_in %}<tr><td>{{ column_txid_in }}</td><td class="text-break"><code>{{ payment.txid_in|e }}</code></td></tr>{% endif %}
+    {% if ',' in payment.txids %}<tr><td>{{ column_txids }}</td><td class="text-break">{% for txid in payment.txids|split(',') %}<code>{{ txid|e }}</code>{% if not loop.last %}<br/>{% endif %}{% endfor %}</td></tr>{% endif %}
+    {% if payment.txid_out %}<tr><td>{{ column_txid_out }}</td><td class="text-break"><code>{{ payment.txid_out|e }}</code></td></tr>{% endif %}
+    {% if payment.ipn_token %}<tr><td>{{ column_ipn_token }}</td><td class="text-break"><code>{{ payment.ipn_token|e }}</code></td></tr>{% endif %}
+    <tr><td>{{ column_date }}</td><td>{{ payment.date_modified|e }}</td></tr>
+  </tbody>
+</table>

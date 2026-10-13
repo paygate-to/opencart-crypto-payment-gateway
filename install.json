@@ -1,0 +1,8 @@
+{
+    "name": "PayGate.to Crypto Payment Gateway (Individual Coins + Multicoin)",
+    "code": "paygatedottocrypto",
+    "license": "GPL",
+    "version": "1.0",
+    "author": "PayGate.to",
+    "link": "https://paygate.to"
+}
