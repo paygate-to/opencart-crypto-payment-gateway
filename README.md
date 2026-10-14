@@ -1,30 +1,73 @@
 # opencart-crypto-payment-gateway
 OpenCart Crypto Payment Gateway Instant Payouts. No KYC crypto payment gateway extension for OpenCart, self hosted on your OpenCart store.
 
-* Accept cryptocurrencies instantly, unique receiving address for every order.
-* QR code displayed on your own store's order page making payment easy for the customer, or one Multicoin option where the customer picks any coin on the hosted checkout page.
-* Precise payment detection, our bot will notify your store after confirming the transaction, marking orders as paid. Every notification is signed by PayGate and verified by the module.
-* Once the customer sends to the specified receiving address, crypto will be instantly forwarded to your specified wallet without any delay or holds.
-* No KYC and without any registration. Both the merchant and the customer stay anonymous.
-* You can control who will handle the blockchain payment fees: the customer or you the merchant.
-* If the customer sends less than the order total, the rest can be sent to the same address and both payments are added up.
-* If the customer made a mistake sending to the wrong token or sending through the wrong network our system will still forward the crypto to you automatically for all supported tokens across all chains.
-* Works with your own dedicated API endpoint and custom checkout domain from the [white label guide](https://paygate.to/white-label-api-custom-domain-guide/).
-* 1.5% flat rate fee + blockchain fees.
-* You can accept payments worldwide without restrictions due to the decentralized nature of how cryptocurrencies work.
-* Multi-currency support.
-* Supported networks: BTC – BCH – Monero (XMR) - Zcash LTC – doge – ETH – TRC20 – ERC20 – BEP20 – Arbitrum – Polygon – AVAX-C – Optimism – Base – Solana [check the full list of supported coins and minimum order value per coin](https://paygate.to/crypto-payment-gateway-no-kyc-instant-payouts/#minimumorder).
+> **The only crypto payment gateway with instant payouts for Solana (SOL), Monero (XMR), Zcash (ZEC) and Bitcoin (BTC).**
+> Every payment is forwarded straight to your own wallet the moment it is confirmed: no holds, no sign up, no KYC. The same support is built into all our plugins and modules: WooCommerce, WHMCS, OpenCart, PrestaShop and Magento.
 
-# Install Guide
+## Features
 
-Requires OpenCart 4.0.2 or newer.
+- Accept **Bitcoin, Solana, Monero, Zcash, ETH, USDT, USDC** and hundreds of other coins and tokens on BTC, BCH, LTC, DOGE, ETH, ERC20, BEP20, Polygon, Arbitrum, Base, Optimism, Avalanche-C, Solana, Tron (TRC20), TON and more ([full list and minimums](https://paygate.to/crypto-payment-gateway-no-kyc-instant-payouts/#minimumorder)).
+- **Instant payouts**: crypto is forwarded to your wallet the moment the payment is confirmed, with no delay or holds.
+- **No KYC and no registration**: you and your customers stay anonymous.
+- **QR code on your own site** with a unique address for every order, or one **Multicoin** option where the customer picks any coin on the hosted page.
+- Payment confirmations signed by PayGate.to and verified by the module: orders are marked paid by themselves.
+- Choose who pays the blockchain fee: you or the customer.
+- If a customer sends the wrong token or uses the wrong network, supported tokens are still forwarded to you automatically.
+- Works with your own checkout domain and a free dedicated API endpoint ([custom domain guide](https://paygate.to/white-label-api-custom-domain-guide/)).
+- Fees: **1.5% flat rate + blockchain fees**.
+- If the customer sends less than the order total, the rest can be sent to the same address and both payments are added up.
 
-* Download [paygatedottocrypto.ocmod.zip](https://github.com/paygate-to/opencart-crypto-payment-gateway/raw/refs/heads/main/paygatedottocrypto.ocmod.zip)
-* In your OpenCart admin open Extensions >> Installer, upload the zip file and click Install.
-* Open Extensions >> Extensions, choose Payments and install one or both payment methods:
-  * **PayGate.to Crypto (Individual Coins)**: the customer picks a coin at checkout and pays with the QR code on your own store.
-  * **PayGate.to Crypto (Multicoin)**: the customer picks any coin on the hosted multi-coin checkout page.
-* Click the pencil edit button. Tick the coins you want to accept and insert your wallet address for each of them (Multicoin: one wallet per network), then enable the payment method and save.
-* Optional: paste your dedicated endpoint into **API Domain**, and your custom checkout domain into **Custom Domain** (Multicoin).
+📘 **Step-by-step guide with screenshots:** [https://paygate.to/crypto-payment-gateway-no-kyc-instant-payouts/opencart/](https://paygate.to/crypto-payment-gateway-no-kyc-instant-payouts/opencart/)
 
-Full guide: [paygate.to/crypto-payment-gateway-no-kyc-instant-payouts](https://paygate.to/crypto-payment-gateway-no-kyc-instant-payouts/#opencartdownload)
+## Requirements
+
+- **OpenCart 4.0.2.0 or newer**
+- A public store with outbound HTTPS (the coin list is loaded live) and PHP OpenSSL
+- A wallet address for each coin you want to accept
+
+## Installation
+
+1. **Prepare your wallets.** Crypto is forwarded to **your own wallet addresses**, one per coin or network: a Bitcoin address for BTC, a Solana address for SOL and Solana tokens, Monero and Zcash addresses for XMR and ZEC, and one `0x` address for ETH and all EVM networks (ERC20, BEP20, Polygon, Arbitrum, Base, Optimism, Avalanche-C). Use **self-custodial wallets** you control and **never exchange deposit addresses**.
+2. **Download** [paygatedottocrypto.ocmod.zip](https://github.com/paygate-to/opencart-crypto-payment-gateway/raw/refs/heads/main/paygatedottocrypto.ocmod.zip) (keep the exact file name).
+3. **Extensions › Installer**: click **Upload**, select the file, then click **+ Install**.
+
+   ![Extension Installer upload button](docs/screenshots/oc-crypto-01-upload.png)
+
+4. **Extensions › Extensions › Payments**: install **PayGate.to Crypto (Individual Coins)** and/or **PayGate.to Crypto (Multicoin)**, then click the pencil.
+
+   ![The two crypto payment methods](docs/screenshots/oc-crypto-03-payments.png)
+
+5. **Individual Coins**: in **Accepted Coins**, tick each coin and paste its payout wallet. Check the three order statuses (Pending / Processing / Failed), turn **Status** on and **Save**.
+
+   ![Accepted Coins table](docs/screenshots/oc-crypto-06-coin-table.png)
+
+6. **Multicoin (optional)**: fill in the payout wallets, including **Solana Wallet (SOL and Solana tokens)**, **Monero Wallet (XMR)**, **Zcash Wallet (ZEC)** and **Bitcoin Wallet (BTC)**. Turn **Status** on and **Save**.
+
+   ![Multicoin payout wallets](docs/screenshots/oc-crypto-08-multicoin.png)
+
+7. **Test**: the customer picks a coin and is taken to the payment page on your own store: QR code, amount, address with a Copy button and a live status. The amount is guaranteed for 3 hours.
+
+   ![Coin selection at checkout](docs/screenshots/oc-crypto-10-coin.png)
+
+   ![QR payment page on the store](docs/screenshots/oc-crypto-11-qr.png)
+
+8. When the payment is confirmed the crypto is forwarded to your wallet and the order moves to your paid status. The admin order page has a **PayGate.to Crypto (Individual Coins)** or **(Multicoin)** tab with every detail.
+
+   ![Payment tab on the admin order page](docs/screenshots/oc-crypto-13-order-tab.png)
+
+## Settings
+
+| Setting | Description | Default |
+|---|---|---|
+| Accepted Coins (Individual) | Tick a coin and enter its payout wallet. | none |
+| Payout wallets (Multicoin) | EVM, BTC, BCH, LTC, DOGE, SOL, TRX/TRC20, XMR, ZEC, TON. | empty |
+| API Domain | Your dedicated API endpoint. | empty (uses api.paygate.to) |
+| Custom Domain (Multicoin) | Domain of the hosted checkout page. | checkout.paygate.to |
+| Underpaid Tolerance | Accept payments slightly below the total (0–10%). | 1% |
+| Customer Pays Blockchain Fees | Add the estimated network fee. | off |
+| Order Status (awaiting / paid / underpaid) | Statuses for each stage. | Pending / Processing / Failed |
+| Logo URL, colours (Multicoin) | Branding of the hosted page. | empty |
+
+Payment confirmations are signed by PayGate.to and verified by the extension, work with SEO URLs and still reach the store in maintenance mode.
+
+Full product page: [https://paygate.to/crypto-payment-gateway-no-kyc-instant-payouts/](https://paygate.to/crypto-payment-gateway-no-kyc-instant-payouts/) · Support: [Telegram](https://t.me/PayGate_to)
